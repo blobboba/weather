@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Погода - прогноз на 7 дней в чате</title>
+    <meta
+      name="description"
+      content="Минималистичный погодный чат: введите город или задайте вопрос и получите прогноз на 7 дней, график температуры и осадков."
+    />
+    <meta name="theme-color" content="#eef2f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#101923" media="(prefers-color-scheme: dark)" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Погода - прогноз на 7 дней в чате" />
+    <meta
+      property="og:description"
+      content="Спросите о погоде естественным языком и посмотрите прогноз, осадки и температуру на неделю."
+    />
+    <meta property="og:image" content="./assets/og-preview.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Интерфейс погодного чата с прогнозом на неделю" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Погода - прогноз на 7 дней в чате" />
+    <meta
+      name="twitter:description"
+      content="Минималистичный чат с погодой, прогнозом на неделю и динамическим фоном."
+    />
+    <meta name="twitter:image" content="./assets/og-preview.jpg" />
+    <meta name="twitter:image:alt" content="Интерфейс погодного чата с прогнозом на неделю" />
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="weather-cloud">
+    <main class="app-shell" aria-label="Погодный чат">
+      <section class="chat-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Weather chat</p>
+            <h1>Погода</h1>
+          </div>
+          <div class="topbar-actions">
+            <div class="status-pill" aria-label="Статус API">
+              <span></span>
+              API online
+            </div>
+            <div class="theme-control" role="group" aria-label="Цветовая тема">
+              <button type="button" data-theme-choice="light" title="Светлая тема" aria-label="Светлая тема">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 7.25a4.75 4.75 0 1 0 0 9.5 4.75 4.75 0 0 0 0-9.5ZM12 2v2.3M12 19.7V22M22 12h-2.3M4.3 12H2M19.07 4.93l-1.63 1.63M6.56 17.44l-1.63 1.63M19.07 19.07l-1.63-1.63M6.56 6.56 4.93 4.93" />
+                </svg>
+              </button>
+              <button type="button" data-theme-choice="dark" title="Темная тема" aria-label="Темная тема">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M19.65 15.04A8 8 0 0 1 8.96 4.35 8.01 8.01 0 1 0 19.65 15.04Z" />
+                </svg>
+              </button>
+              <button type="button" data-theme-choice="system" title="Системная тема" aria-label="Системная тема">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 5.5h16v10H4zM8.5 19h7M12 15.5V19" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div class="suggestions" aria-label="Быстрый выбор города">
+          <button type="button" data-city="Москва">Москва</button>
+          <button type="button" data-city="Санкт-Петербург">Санкт-Петербург</button>
+          <button type="button" data-city="Казань">Казань</button>
+          <button type="button" data-city="London">London</button>
+        </div>
+
+        <section class="messages" id="messages" aria-live="polite">
+          <article class="message assistant">
+            <div class="avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <path d="M12 3.2a6.6 6.6 0 0 0-6.42 5.05A5.56 5.56 0 0 0 6.15 19.3h11.18a4.66 4.66 0 0 0 .45-9.3A6.62 6.62 0 0 0 12 3.2Zm0 2a4.62 4.62 0 0 1 4.48 3.55l.31 1.31 1.35-.03h.12a2.66 2.66 0 0 1-.26 5.31H6.15a3.56 3.56 0 0 1-.19-7.12l1.22-.06.28-1.19A4.61 4.61 0 0 1 12 5.2Z" />
+              </svg>
+            </div>
+            <div class="bubble">
+              <p>Напишите город, и я покажу прогноз на ближайшие 7 дней.</p>
+            </div>
+          </article>
+        </section>
+
+        <form class="composer" id="weather-form">
+          <label class="sr-only" for="city-input">Город</label>
+          <input
+            id="city-input"
+            name="city"
+            type="text"
+            autocomplete="off"
+            placeholder="Введите город"
+            required
+          />
+          <button class="send-button" type="submit" aria-label="Отправить">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M12 4.25a.9.9 0 0 1 .64.26l5.1 5.1a.9.9 0 0 1-1.28 1.28l-3.56-3.57V19a.9.9 0 1 1-1.8 0V7.32l-3.56 3.57a.9.9 0 0 1-1.28-1.28l5.1-5.1a.9.9 0 0 1 .64-.26Z" />
+            </svg>
+          </button>
+        </form>
+      </section>
+
+      <aside class="side-panel" aria-label="Текущая сводка">
+        <div class="glass-orbit">
+          <div class="weather-mark" id="weather-mark">
+            <span class="weather-glyph weather-glyph-cloud">
+              <svg viewBox="0 0 80 80" role="img" aria-hidden="true">
+                <circle cx="39" cy="32" r="17" />
+                <path d="M21 52h36a11 11 0 0 0 0-22h-1.7A18 18 0 0 0 21 36.6 8 8 0 0 0 21 52Z" />
+              </svg>
+            </span>
+          </div>
+          <p id="current-city">Город не выбран</p>
+          <strong id="current-temp">--°</strong>
+          <span id="current-summary">Ожидаю запрос</span>
+        </div>
+        <div class="metric-grid" id="metric-grid">
+          <div>
+            <span>Ветер</span>
+            <b>--</b>
+          </div>
+          <div>
+            <span>Осадки</span>
+            <b>--</b>
+          </div>
+        </div>
+        <footer>
+          Данные: <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a>
+        </footer>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
